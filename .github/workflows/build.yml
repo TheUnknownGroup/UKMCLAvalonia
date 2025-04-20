@@ -32,210 +32,212 @@ jobs:
           pub_dir: ${{ env.dir }}/win-x64/publish
         run: |
           dotnet publish -c Release -r win-x64 --self-contained true
-          mkdir -p out/win-x64/
-          cp -r "${{ env.pub_dir }}/*.exe" out/win-x64/
-          cp -r "${{ env.pub_dir }}/*.dll" out/win-x64/
-          cp -r "${{ env.pub_dir }}/*.json" out/win-x64/
-          cp -r "${{ env.pub_dir }}/*.pdb" out/win-x64/
+    # mkdir -p out/win-x64/
+    # cp -r "${{ env.pub_dir }}/*.exe" out/win-x64/
+    # cp -r "${{ env.pub_dir }}/*.dll" out/win-x64/
+    # cp -r "${{ env.pub_dir }}/*.json" out/win-x64/
+    # cp -r "${{ env.pub_dir }}/*.pdb" out/win-x64/
           
       - name: publish arm64
         env:
           pub_dir: ${{ env.dir }}/win-arm64/publish
         run: |
           dotnet publish -c Release -r win-arm64 --self-contained true
-          mkdir -p out/win-arm64/
-          cp -r "${{ env.pub_dir }}/*.exe" out/win-arm64/
-          cp -r "${{ env.pub_dir }}/*.dll" out/win-arm64/
-          cp -r "${{ env.pub_dir }}/*.json" out/win-arm64/
-          cp -r "${{ env.pub_dir }}/*.pdb" out/win-arm64/
+    # mkdir -p out/win-arm64/
+    # cp -r "${{ env.pub_dir }}/*.exe" out/win-arm64/
+    # cp -r "${{ env.pub_dir }}/*.dll" out/win-arm64/
+    # cp -r "${{ env.pub_dir }}/*.json" out/win-arm64/
+    # cp -r "${{ env.pub_dir }}/*.pdb" out/win-arm64/
 
       - name: upload
         uses: actions/upload-artifact@v4
         with:
           name: wins
           path: |
-            out/win-x64/*
-            out/win-arm64/*
+            ${{ github.workspace }}/bin/Release/net8.0/win-x64/publish/
+            ${{ github.workspace }}/bin/Release/net8.0/win-arm64/publish/
+    # out/win-x64/*
+    # out/win-arm64/*
 
-  buildPublishers-Lin:
-    if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
+#   buildPublishers-Lin:
+#     if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
 
-    permissions:
-      contents: write
-      id-token: write
+#     permissions:
+#       contents: write
+#       id-token: write
 
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - name: setup .net sdk
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.sdk-ver }}
+#       - name: setup .net sdk
+#         uses: actions/setup-dotnet@v4
+#         with:
+#           dotnet-version: ${{ env.sdk-ver }}
 
-      - name: install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libc6 libx11-6 libice6 libsm6 \
-          libfontconfig libgcc-s1 libssl3 libstdc++6 tzdata zlib1g
+#       - name: install dependencies
+#         run: |
+#           sudo apt-get update
+#           sudo apt-get install -y libc6 libx11-6 libice6 libsm6 \
+#           libfontconfig libgcc-s1 libssl3 libstdc++6 tzdata zlib1g
 
-      - name: publish x64
-        env:
-          pub_dir: ${{ env.dir }}/linux-x64/publish
-        run: |
-          dotnet publish -c Release -r linux-x64 --self-contained true
-          mkdir -p out/lin-x64/
-          cp -r "${{ env.pub_dir }}/*.dll" out/lin-x64
-          cp -r "${{ env.pub_dir }}/*.so" out/lin-x64
-          cp -r "${{ env.pub_dir }}/UKMCLAvalonia" out/lin-x64
-          cp -r "${{ env.pub_dir }}/*.pdb" out/lin-x64
-          cp -r "${{ env.pub_dir }}/*.json" out/lin-x64
+#       - name: publish x64
+#         env:
+#           pub_dir: ${{ env.dir }}/linux-x64/publish
+#         run: |
+#           dotnet publish -c Release -r linux-x64 --self-contained true
+#           mkdir -p out/lin-x64/
+#           cp -r "${{ env.pub_dir }}/*.dll" out/lin-x64
+#           cp -r "${{ env.pub_dir }}/*.so" out/lin-x64
+#           cp -r "${{ env.pub_dir }}/UKMCLAvalonia" out/lin-x64
+#           cp -r "${{ env.pub_dir }}/*.pdb" out/lin-x64
+#           cp -r "${{ env.pub_dir }}/*.json" out/lin-x64
           
-      - name: publish arm64
-        env:
-          pub_dir: ${{ env.dir }}/linux-arm64/publish
-        run: |
-          dotnet publish -c Release -r linux-arm64 --self-contained true
-          mkdir -p out/lin-arm64/
-          cp -r "${{ env.pub_dir }}/*.dll" out/lin-arm64
-          cp -r "${{ env.pub_dir }}/*.so" out/lin-arm64
-          cp -r "${{ env.pub_dir }}/UKMCLAvalonia" out/lin-arm64
-          cp -r "${{ env.pub_dir }}/*.pdb" out/lin-arm64
-          cp -r "${{ env.pub_dir }}/*.json" out/lin-arm64
+#       - name: publish arm64
+#         env:
+#           pub_dir: ${{ env.dir }}/linux-arm64/publish
+#         run: |
+#           dotnet publish -c Release -r linux-arm64 --self-contained true
+#           mkdir -p out/lin-arm64/
+#           cp -r "${{ env.pub_dir }}/*.dll" out/lin-arm64
+#           cp -r "${{ env.pub_dir }}/*.so" out/lin-arm64
+#           cp -r "${{ env.pub_dir }}/UKMCLAvalonia" out/lin-arm64
+#           cp -r "${{ env.pub_dir }}/*.pdb" out/lin-arm64
+#           cp -r "${{ env.pub_dir }}/*.json" out/lin-arm64
           
-      - name: publish musl-x64
-        env:
-          pub_dir: ${{ env.dir }}/linux-musl-x64/publish
-        run: |
-          dotnet publish -c Release -r linux-musl-x64 --self-contained true
-          mkdir -p out/lin-musl-x64/
-          cp -r "${{ env.pub_dir }}/*.so" out/lin-musl-x64/
-          cp -r "${{ env.pub_dir }}/*.dll" out/lin-musl-x64/
-          cp -r "${{ env.pub_dir }}/UKMCLAvalonia" out/lin-musl-x64/
-          cp -r "${{ env.pub_dir }}/*.pdb" out/lin-musl-x64/
-          cp -r "${{ env.pub_dir }}/*.json" out/lin-musl-x64/
+#       - name: publish musl-x64
+#         env:
+#           pub_dir: ${{ env.dir }}/linux-musl-x64/publish
+#         run: |
+#           dotnet publish -c Release -r linux-musl-x64 --self-contained true
+#           mkdir -p out/lin-musl-x64/
+#           cp -r "${{ env.pub_dir }}/*.so" out/lin-musl-x64/
+#           cp -r "${{ env.pub_dir }}/*.dll" out/lin-musl-x64/
+#           cp -r "${{ env.pub_dir }}/UKMCLAvalonia" out/lin-musl-x64/
+#           cp -r "${{ env.pub_dir }}/*.pdb" out/lin-musl-x64/
+#           cp -r "${{ env.pub_dir }}/*.json" out/lin-musl-x64/
 
 
-      - name: upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: lins
-          path: |
-            out/lin-x64/*
-            out/lin-arm64/*
-            out/lin-musl-x64/*
+#       - name: upload
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: lins
+#           path: |
+#             out/lin-x64/*
+#             out/lin-arm64/*
+#             out/lin-musl-x64/*
 
 
-  buildPublishers-Mac:
-    if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
+#   buildPublishers-Mac:
+#     if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
 
-    permissions:
-      contents: write
-      id-token: write
+#     permissions:
+#       contents: write
+#       id-token: write
 
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - name: setup .net sdk
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.sdk-ver }}
+#       - name: setup .net sdk
+#         uses: actions/setup-dotnet@v4
+#         with:
+#           dotnet-version: ${{ env.sdk-ver }}
 
-      - name: publish
-        env:
-          pub_dir: ${{ env.dir }}/osx-x64/publish
-        run: |
-          dotnet publish -c Release -r osx-x64 --self-contained true
-          mkdir -p out/mac-x64
-          cp -r "${{ env.pub_dir }}/*.dylib" out/mac-x64
-          cp -r "${{ env.pub_dir }}/*.dll" out/mac-x64
-          cp -r "${{ env.pub_dir }}/UKMCLAvalonia" out/mac-x64
-          cp -r "${{ env.pub_dir }}/*.pdb" out/mac-x64
-          cp -r "${{ env.pub_dir }}/*.json" out/mac-x64
+#       - name: publish
+#         env:
+#           pub_dir: ${{ env.dir }}/osx-x64/publish
+#         run: |
+#           dotnet publish -c Release -r osx-x64 --self-contained true
+#           mkdir -p out/mac-x64
+#           cp -r "${{ env.pub_dir }}/*.dylib" out/mac-x64
+#           cp -r "${{ env.pub_dir }}/*.dll" out/mac-x64
+#           cp -r "${{ env.pub_dir }}/UKMCLAvalonia" out/mac-x64
+#           cp -r "${{ env.pub_dir }}/*.pdb" out/mac-x64
+#           cp -r "${{ env.pub_dir }}/*.json" out/mac-x64
           
-      - name: publish
-        env:
-          pub_dir: ${{ env.dir }}/osx-arm64/publish
-        run: |
-          dotnet publish -c Release -r osx-arm64 --self-contained true
-          mkdir -p out/mac-arm64
-          cp -r "${{ env.pub_dir }}/*.dylib" out/mac-arm64
-          cp -r "${{ env.pub_dir }}/*.dll" out/mac-arm64
-          cp -r "${{ env.pub_dir }}/UKMCLAvalonia" out/mac-arm64
-          cp -r "${{ env.pub_dir }}/*.pdb" out/mac-arm64
-          cp -r "${{ env.pub_dir }}/*.json" out/mac-arm64
+#       - name: publish
+#         env:
+#           pub_dir: ${{ env.dir }}/osx-arm64/publish
+#         run: |
+#           dotnet publish -c Release -r osx-arm64 --self-contained true
+#           mkdir -p out/mac-arm64
+#           cp -r "${{ env.pub_dir }}/*.dylib" out/mac-arm64
+#           cp -r "${{ env.pub_dir }}/*.dll" out/mac-arm64
+#           cp -r "${{ env.pub_dir }}/UKMCLAvalonia" out/mac-arm64
+#           cp -r "${{ env.pub_dir }}/*.pdb" out/mac-arm64
+#           cp -r "${{ env.pub_dir }}/*.json" out/mac-arm64
 
-      - name: upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: macs
-          path: |
-            out/mac-x64
-            out/mac-arm64
+#       - name: upload
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: macs
+#           path: |
+#             out/mac-x64
+#             out/mac-arm64
 
-  buildInstaller-Win:
-      if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
+#   buildInstaller-Win:
+#       if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
 
-      needs: [buildPublishers-Win]
+#       needs: [buildPublishers-Win]
 
-      permissions:
-          contents: write
-          id-token: write
+#       permissions:
+#           contents: write
+#           id-token: write
       
-      runs-on: windows-latest
-      steps:
-          - uses: actions/checkout@v4
+#       runs-on: windows-latest
+#       steps:
+#           - uses: actions/checkout@v4
 
-          - uses: actions/download-artifact@v4
-            with:
-              path: ${{ github.workspace }}\published
+#           - uses: actions/download-artifact@v4
+#             with:
+#               path: ${{ github.workspace }}\published
             
-          - name: build installer x64
-            run: |
-              cd ${{ github.workspace }}\packaging\exe-x64
+#           - name: build installer x64
+#             run: |
+#               cd ${{ github.workspace }}\packaging\exe-x64
               
-              copy -r "${{ github.workspace }}\out\win-x64\*"
+#               copy -r "${{ github.workspace }}\out\win-x64\*"
 
-              curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.2.1.exe --output innosetup.exe
-              Start-Process .\innosetup.exe /VERYSILENT -Wait
+#               curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.2.1.exe --output innosetup.exe
+#               Start-Process .\innosetup.exe /VERYSILENT -Wait
 
-              cd "C:\Program Files (x86)\Inno Setup 6"
-              iscc "${{ github.workspace }}\packaging\exe-x64\installer.iss"
+#               cd "C:\Program Files (x86)\Inno Setup 6"
+#               iscc "${{ github.workspace }}\packaging\exe-x64\installer.iss"
               
-          - name: build installer arm64
-            run: |
-              cd ${{ github.workspace }}\packaging\exe-arm64
+#           - name: build installer arm64
+#             run: |
+#               cd ${{ github.workspace }}\packaging\exe-arm64
               
-              copy -r "${{ github.workspace }}\out\win-arm64\*"
+#               copy -r "${{ github.workspace }}\out\win-arm64\*"
 
-              curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.2.1.exe --output innosetup.exe
-              Start-Process .\innosetup.exe /VERYSILENT -Wait
+#               curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.2.1.exe --output innosetup.exe
+#               Start-Process .\innosetup.exe /VERYSILENT -Wait
 
-              cd "C:\Program Files (x86)\Inno Setup 6"
-              iscc "${{ github.workspace }}\packaging\exe-arm64\installer.iss"
+#               cd "C:\Program Files (x86)\Inno Setup 6"
+#               iscc "${{ github.workspace }}\packaging\exe-arm64\installer.iss"
 
-          - name: upload artifacts
-            uses: actions/upload-artifact@v4
-            with:
-              name: wins
-              path: |
-                ${{ github.workspace }}\packaging\exe-x64\UKMCL-Windows-Installer-en_US-x64+0.0.0.exe
-                ${{ github.workspace }}\packaging\exe-arm64\UKMCL-Windows-Installer-en_US-arm64+0.0.0.exe
-              retention-days: 1
-# must also zip all of this too
-# rid: mac: osx-x64, osx-arm64; win: win-x64, win-arm64; lin: linux-x64, linux-arm64, linux-musl-x64
-# For linux distributions, appimage for ubuntu, dpkg-deb for debian, flatpak for uni gui packaging, optional to snap
+#           - name: upload artifacts
+#             uses: actions/upload-artifact@v4
+#             with:
+#               name: wins
+#               path: |
+#                 ${{ github.workspace }}\packaging\exe-x64\UKMCL-Windows-Installer-en_US-x64+0.0.0.exe
+#                 ${{ github.workspace }}\packaging\exe-arm64\UKMCL-Windows-Installer-en_US-arm64+0.0.0.exe
+#               retention-days: 1
+# # must also zip all of this too
+# # rid: mac: osx-x64, osx-arm64; win: win-x64, win-arm64; lin: linux-x64, linux-arm64, linux-musl-x64
+# # For linux distributions, appimage for ubuntu, dpkg-deb for debian, flatpak for uni gui packaging, optional to snap
 
-  buildLin:
-      if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
+#   buildLin:
+#       if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
       
-      needs: [buildPublishers-Lin]
+#       needs: [buildPublishers-Lin]
 
-      permissions:
-          contents: write
-          id-token: write
+#       permissions:
+#           contents: write
+#           id-token: write
 
-      runs-on: ubuntu-latest
-      steps:
-          - uses: actions/checkout@v4
+#       runs-on: ubuntu-latest
+#       steps:
+#           - uses: actions/checkout@v4
