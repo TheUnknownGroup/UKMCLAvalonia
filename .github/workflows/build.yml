@@ -21,6 +21,7 @@ jobs:
     strategy:
       matrix:
         os: [win-x64, win-arm64, linux-x64, linux-arm64, linux-musl-x64, osx-x64, osx-arm64]
+        folders: [win-x64, win]
 
     runs-on: ubuntu-latest
     steps:
@@ -44,7 +45,7 @@ jobs:
       - name: upload ${{ matrix.os }}
         uses: actions/upload-artifact@v4
         with:
-          name: out
+          name: out-stuff
           path: |
             out/${{ matrix.os }}/
           retention-days: 1
@@ -64,7 +65,7 @@ jobs:
 
           - uses: actions/download-artifact@v4
             with:
-              name: out
+              name: out-stuff
               path: ${{ github.workspace }}\out
             
           - name: build installer x64
