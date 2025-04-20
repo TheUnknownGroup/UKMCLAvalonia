@@ -11,66 +11,83 @@ env:
     dir: "${{ github.workspace }}/bin/Release/net8.0"
 
 jobs:
+    buildPublishers:
+      if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
+
+      strategy:
+        matrix:
+          os: [win-x64, win-arm64, linux-x64, linux-arm64, linux-musl-x64, osx-x64, osx-arm64]
+          linux: [linux-x64, linux-arm64, linux-musl-x64]
+          files: [win-x64, win-arm64, lin-x64, lin-arm64, lin-musl-x64, mac-x64, mac-arm64]
+          folders: [wins, lins, macs]
+
+      permissions:
+          contents: write
+          id-token: write
+      
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+
+        - name: setup .net sdk
+          uses: actions/setup-dotnet@v4
+          with:
+            dotnet-version: ${{ env.sdk-ver }}
+
+        - name: install dependencies
+          if: ${{ matrix.linux }}
+          run: |
+              sudo apt-get update
+              sudo apt-get install -y libc6 libx11-6 libice6 libsm6 \
+              libfontconfig libgcc-s1 libssl3 libstdc++6 tzdata zlib1g
+
+        - name: publish
+          env:
+            pub_dir: ${{ env.dir }}/${{ matrix.os }}/publish
+          run: |
+            dotnet publish -c Release -r ${{ matrix.os }} --self-contained true
+            mkdir -p out/${{ matrix.files }}
+            cp -r "${{ env.pub_dir }}/*" out/${{ matrix.files }}
+
+        - name: upload
+          uses: actions/upload-artifact@v4
+          with:
+            name: ${{ matrix.folders }}
+            path: out/${{ matrix.files }}
+
     buildWin:
         if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
+
+        needs: [buildPublishers]
 
         permissions:
             contents: write
             id-token: write
+
+        strategy:
+          matrix:
+            os: [exe-x64, exe-arm64]
+            os2: [win-x64, win-arm64]
         
         runs-on: windows-latest
         steps:
             - uses: actions/checkout@v4
 
-            - name: setup .net sdk
-              uses: actions/setup-dotnet@v4
+            - uses: actions/download-artifact@v4
               with:
-                dotnet-version: ${{ env.sdk-ver }}
-
-            - name: publish x64
-              env:
-                pub_dir: ${{ env.dir }}/win-x64/publish
-              run: |
-                dotnet publish -c Release -r win-x64 --self-contained true
-                mkdir -p out/
-                cd out/
-                mkdir -p winx64/
-                cd winx64/
-                copy -r "${{ env.pub_dir }}/*"
-                
-            - name: publish arm64
-              env:
-                pub_dir: ${{ env.dir }}/win-arm64/publish
-              run: |
-                dotnet publish -c Release -r win-arm64 --self-contained true
-                cd out/
-                mkdir -p winarm64/
-                cd winarm64/
-                copy -r "${{ env.pub_dir }}/*"
+                path: ${{ github.workspace }}\published
               
-            - name: build installer - win-x64
+            - name: build installer
               run: |
-                cd ${{ github.workspace }}\packaging\exe-x64
+                cd ${{ github.workspace }}\packaging\${{ matrix.os }}
                 
-                copy -r "${{ github.workspace }}\out\winx64\*"
+                copy -r "${{ github.workspace }}\out\${{ matrix.os2 }}\*"
 
                 curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.2.1.exe --output innosetup.exe
                 Start-Process .\innosetup.exe /VERYSILENT -Wait
 
                 cd "C:\Program Files (x86)\Inno Setup 6"
-                iscc "${{ github.workspace }}\packaging\exe-x64\installer.iss"
-            
-            - name: build installer - win-arm64
-              run: |
-                cd ${{ github.workspace }}\packaging\exe-arm64
-                
-                copy -r "${{ github.workspace }}\out\winarm64\*"
-
-                curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.2.1.exe --output innosetup.exe
-                Start-Process .\innosetup.exe /VERYSILENT -Wait
-
-                cd "C:\Program Files (x86)\Inno Setup 6"
-                iscc "${{ github.workspace }}\packaging\exe-arm64\installer.iss"
+                iscc "${{ github.workspace }}\packaging\${{ matrix.os }}\installer.iss"
 
             - name: upload artifacts
               uses: actions/upload-artifact@v4
@@ -81,11 +98,13 @@ jobs:
                   ${{ github.workspace }}\packaging\exe-arm64\UKMCL-Windows-Installer-en_US-arm64+0.0.0.exe
                 retention-days: 1
 # must also zip all of this too
-# rid: mac: osx-x64, osx-arm64; win: win-x64, win-x86, win-arm64; lin: linux-x64, linux-arm, linux-arm64, linux-musl-x64
+# rid: mac: osx-x64, osx-arm64; win: win-x64, win-arm64; lin: linux-x64, linux-arm64, linux-musl-x64
 # For linux distributions, appimage for ubuntu, dpkg-deb for debian, flatpak for uni gui packaging, optional to snap
 
     buildLin:
         if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
+        
+        needs: [buildPublishers]
 
         permissions:
             contents: write
@@ -94,73 +113,10 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
-  
-            - name: setup .net sdk
-              uses: actions/setup-dotnet@v4
-              with:
-                dotnet-version: ${{ env.sdk-ver }}
-
-            - name: install dependencies
-              run: |
-                sudo apt-get update
-                sudo apt-get install -y libc6 libx11-6 libice6 libsm6 \
-                libfontconfig libgcc-s1 libssl3 libstdc++6 tzdata zlib1g
-
-            - name: publish
-              env:
-                pub_dir: ${{ env.dir }}/linux-x64/publish/
-              run: |
-                dotnet publish -c Release -r linux-x64 --self-contained true
-                mkdir -p out/linx64/
-                cp -r "${{ env.pub_dir}}" out/linx64/
 
             - name: upload artifacts
               uses: actions/upload-artifact@v4
               with:
                 name: lins
-                path: out/*
+                path: out/
                 retention-days: 1
-
-
-# name: Build Avalonia App
-
-# on:
-#   push:
-#     branches: [main]
-
-# jobs:
-#   build:
-#     strategy:
-#       matrix:
-#         os: [windows-latest, ubuntu-latest, macos-latest]
-#         config: [Release]
-#     runs-on: ${{ matrix.os }}
-
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v3
-
-#       - name: Setup .NET 8 SDK
-#         uses: actions/setup-dotnet@v3
-#         with:
-#           dotnet-version: 8.0.x
-
-#       - name: Restore dependencies
-#         run: dotnet restore
-
-#       - name: Build project
-#         run: dotnet build --configuration ${{ matrix.config }} --no-restore
-
-#       - name: Publish self-contained app
-#         run: >
-#           dotnet publish -c ${{ matrix.config }}
-#           -r ${{ runner.os == 'Windows' && 'win-x64' || (runner.os == 'Linux' && 'linux-x64' || 'osx-x64') }}
-#           --self-contained true
-#           -p:PublishSingleFile=true
-#           -o publish/${{ runner.os }}
-
-#       - name: Upload artifact
-#         uses: actions/upload-artifact@v3
-#         with:
-#           name: AvaloniaApp-${{ runner.os }}
-#           path: publish/${{ runner.os }}
