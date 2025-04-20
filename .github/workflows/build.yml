@@ -1,0 +1,73 @@
+name: Build UKMCLAvalonia
+
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+
+env:
+    sdk-ver: '8.0.x'
+
+jobs:
+    buildWin:
+        if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
+
+        permissions:
+            contents: write
+            id-token: write
+        
+        runs-on: windows-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: setup .net sdk
+              uses: actions/setup-dotnet@v4
+              with:
+                dotnet-version: ${{ env.sdk-ver }}
+
+            - name: install dependencies
+              run: |
+
+# name: Build Avalonia App
+
+# on:
+#   push:
+#     branches: [main]
+
+# jobs:
+#   build:
+#     strategy:
+#       matrix:
+#         os: [windows-latest, ubuntu-latest, macos-latest]
+#         config: [Release]
+#     runs-on: ${{ matrix.os }}
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Setup .NET 8 SDK
+#         uses: actions/setup-dotnet@v3
+#         with:
+#           dotnet-version: 8.0.x
+
+#       - name: Restore dependencies
+#         run: dotnet restore
+
+#       - name: Build project
+#         run: dotnet build --configuration ${{ matrix.config }} --no-restore
+
+#       - name: Publish self-contained app
+#         run: >
+#           dotnet publish -c ${{ matrix.config }}
+#           -r ${{ runner.os == 'Windows' && 'win-x64' || (runner.os == 'Linux' && 'linux-x64' || 'osx-x64') }}
+#           --self-contained true
+#           -p:PublishSingleFile=true
+#           -o publish/${{ runner.os }}
+
+#       - name: Upload artifact
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: AvaloniaApp-${{ runner.os }}
+#           path: publish/${{ runner.os }}

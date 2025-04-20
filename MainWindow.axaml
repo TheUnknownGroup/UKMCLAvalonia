@@ -1,0 +1,25 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		Width="950" Height="530"
+        x:Class="UKMCLAvalonia.MainWindow"
+        Title="UKMCL Avalonia"
+	    mc:Ignorable="d"
+		CanResize="false">
+	<DockPanel>
+		<!-- left top bottom right -->
+		<ToggleSwitch DockPanel.Dock="Top" x:Name="ThemeT" Margin="15, 15, 0, 0"
+			IsChecked="True" Checked="OnThemeTog"
+			Unchecked="OnThemeTog"/>
+		<Border BorderThickness="1" BorderBrush="Black" Background="" Width="200" Height="215" CornerRadius="5">
+			<StackPanel Margin="20" Spacing="10" HorizontalAlignment="Center">
+				<TextBlock Text="Username:"/>
+				<TextBox x:Name="UserInp" Watermark="Email or Username" Width="150" HorizontalAlignment="Left"/>
+				<TextBlock Text="Password:"/>
+				<TextBox x:Name="PassInp" PasswordChar="*" Watermark="Password" Width="150" HorizontalAlignment="Left"/>
+				<Button Content="Say Hello" Click="OnHelloClick" Width="80"/>
+			</StackPanel>
+		</Border>
+	</DockPanel>
+</Window>

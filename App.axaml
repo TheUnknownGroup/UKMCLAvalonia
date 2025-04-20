@@ -1,0 +1,15 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="UKMCLAvalonia.App"
+             RequestedThemeVariant="Default">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.Styles>
+		<FluentTheme>
+			<FluentTheme.Palettes>
+				<ColorPaletteResources x:Key="Light" Accent="#ff537c7d" AltHigh="White" AltLow="White" AltMedium="White" AltMediumHigh="White" AltMediumLow="White" BaseHigh="Black" BaseLow="#ff92b7bf" BaseMedium="#ff407d89" BaseMediumHigh="#ff095765" BaseMediumLow="#ff246a77" ChromeAltLow="#ff095765" ChromeBlackHigh="Black" ChromeBlackLow="#ff92b7bf" ChromeBlackMedium="#ff095765" ChromeBlackMediumLow="#ff407d89" ChromeDisabledHigh="#ff92b7bf" ChromeDisabledLow="#ff407d89" ChromeGray="#ff246a77" ChromeHigh="#ff92b7bf" ChromeLow="#ffc8e7ee" ChromeMedium="#ffbddde5" ChromeMediumLow="#ffc8e7ee" ChromeWhite="White" ListLow="#ffbddde5" ListMedium="#ff92b7bf" RegionColor="#ffc6c2d7" />
+				<ColorPaletteResources x:Key="Dark" Accent="#ff223c57" AltHigh="Black" AltLow="Black" AltMedium="Black" AltMediumHigh="Black" AltMediumLow="Black" BaseHigh="White" BaseLow="#ff646464" BaseMedium="#ffb2b2b2" BaseMediumHigh="#ffc6c6c6" BaseMediumLow="#ff8b8b8b" ChromeAltLow="#ffc6c6c6" ChromeBlackHigh="Black" ChromeBlackLow="#ffc6c6c6" ChromeBlackMedium="Black" ChromeBlackMediumLow="Black" ChromeDisabledHigh="#ff646464" ChromeDisabledLow="#ffb2b2b2" ChromeGray="#ff9f9f9f" ChromeHigh="#ff9f9f9f" ChromeLow="#ff2c2c2c" ChromeMedium="#ff3a3a3a" ChromeMediumLow="#ff565656" ChromeWhite="White" ListLow="#ff3a3a3a" ListMedium="#ff646464" RegionColor="#ff313131" />
+			</FluentTheme.Palettes>
+		</FluentTheme>
+	</Application.Styles>
+</Application>

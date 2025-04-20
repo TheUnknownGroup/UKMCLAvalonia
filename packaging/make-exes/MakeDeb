@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# .NET publish
+dotnet publish ""
