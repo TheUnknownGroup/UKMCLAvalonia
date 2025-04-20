@@ -28,34 +28,25 @@ jobs:
           dotnet-version: ${{ env.sdk-ver }}
 
       - name: publish x64
-        env:
-          pub_dir: ${{ env.dir }}/win-x64/publish
         run: |
           dotnet publish -c Release -r win-x64 --self-contained true
-    # mkdir -p out/win-x64/
-    # cp -r "${{ env.pub_dir }}/*.exe" out/win-x64/
-    # cp -r "${{ env.pub_dir }}/*.dll" out/win-x64/
-    # cp -r "${{ env.pub_dir }}/*.json" out/win-x64/
-    # cp -r "${{ env.pub_dir }}/*.pdb" out/win-x64/
+          mkdir -p out/win-x64/
+          cd out/win-x64/
+          cp -r ${{ env.dir }}/win-x64/publish/*.exe out/win-x64/
           
       - name: publish arm64
-        env:
-          pub_dir: ${{ env.dir }}/win-arm64/publish
         run: |
           dotnet publish -c Release -r win-arm64 --self-contained true
-    # mkdir -p out/win-arm64/
-    # cp -r "${{ env.pub_dir }}/*.exe" out/win-arm64/
-    # cp -r "${{ env.pub_dir }}/*.dll" out/win-arm64/
-    # cp -r "${{ env.pub_dir }}/*.json" out/win-arm64/
-    # cp -r "${{ env.pub_dir }}/*.pdb" out/win-arm64/
+          mkdir -p out/win-arm64/
+          cd out/win-arm64/
+          cp -r "${{ env.dir }}/win-arm64/publish/" ./
 
       - name: upload
         uses: actions/upload-artifact@v4
         with:
           name: wins
           path: |
-            ${{ github.workspace }}/bin/Release/net8.0/win-x64/publish/
-            ${{ github.workspace }}/bin/Release/net8.0/win-arm64/publish/
+            out/*
     # out/win-x64/*
     # out/win-arm64/*
 
