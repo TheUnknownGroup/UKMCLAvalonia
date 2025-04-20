@@ -64,13 +64,16 @@ jobs:
 
           - uses: actions/download-artifact@v4
             with:
+              name: |
+                out win-x64
+                out win-arm64
               path: ${{ github.workspace }}\out
             
           - name: build installer x64
             run: |
               cd ${{ github.workspace }}\packaging\exe-x64
               
-              copy -r "${{ github.workspace }}\out win-x64\win-x64\*"
+              copy -r "${{ github.workspace }}\out\win-x64\*"
 
               curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.2.1.exe --output innosetup.exe
               Start-Process .\innosetup.exe /VERYSILENT -Wait
@@ -82,7 +85,7 @@ jobs:
             run: |
               cd ${{ github.workspace }}\packaging\exe-arm64
               
-              copy -r "${{ github.workspace }}\out win-arm64\win-arm64\*"
+              copy -r "${{ github.workspace }}\out\win-arm64\*"
 
               curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.2.1.exe --output innosetup.exe
               Start-Process .\innosetup.exe /VERYSILENT -Wait
