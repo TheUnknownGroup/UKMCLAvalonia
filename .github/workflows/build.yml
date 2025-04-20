@@ -77,8 +77,8 @@ jobs:
               with:
                 name: wins
                 path: |
-                  ${{ github.workspace }}\packaging\exe-x64\*.exe
-                  ${{ github.workspace }}\packaging\exe-arm64\*.exe
+                  ${{ github.workspace }}\packaging\exe-x64\UKMCL-Windows-Installer-en_US-x64+0.0.0.exe
+                  ${{ github.workspace }}\packaging\exe-arm64\UKMCL-Windows-Installer-en_US-arm64+0.0.0.exe
                 retention-days: 1
 # must also zip all of this too
 # rid: mac: osx-x64, osx-arm64; win: win-x64, win-x86, win-arm64; lin: linux-x64, linux-arm, linux-arm64, linux-musl-x64
