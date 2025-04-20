@@ -9,7 +9,6 @@ on:
 env:
     sdk-ver: '8.0.x'
     dir: "${{ github.workspace }}/bin/Release/net8.0"
-    inno: 6.2.1
 
 jobs:
     buildWin:
@@ -55,7 +54,7 @@ jobs:
                 
                 copy -r "${{ github.workspace }}/out/winx64/*"
 
-                curl https://mlaan2.home.xs4all.nl/ispack/innosetup-${{ env.inno }}.exe --output innosetup.exe
+                curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.2.1.exe --output innosetup.exe
                 Start-Process .\innosetup.exe /VERYSILENT -Wait
 
                 cd "C:\Program Files (x86)\Inno Setup 6"
