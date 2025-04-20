@@ -8,6 +8,7 @@ on:
 
 env:
     sdk-ver: '8.0.x'
+    win:
 
 jobs:
     buildWin:
@@ -26,9 +27,13 @@ jobs:
               with:
                 dotnet-version: ${{ env.sdk-ver }}
 
-            - name: install dependencies
+            - run: dotnet restore
+
+            - name: build
               run: |
-                    
+                dotnet build
+
+              
 # must also zip all of this too
 # rid: mac: osx-x64, osx-arm64; win: win-x64, win-x86, win-arm64; lin: linux-x64, linux-arm, linux-arm64, linux-musl-x64
 # For linux distributions, appimage for ubuntu, dpkg-deb for debian, flatpak for uni gui packaging, optional to snap
@@ -49,13 +54,13 @@ jobs:
               with:
                 dotnet-version: ${{ env.sdk-ver }}
 
-            - name: install known dependencies
+            - name: install dependencies
               run: |
                 sudo apt-get update
                 sudo apt-get install -y libc6 libx11-6 libice6 libsm6 \
                 libfontconfig libgcc-s1 libssl3 libstdc++6 tzdata zlib1g
 
-  
+
 # name: Build Avalonia App
 
 # on:
