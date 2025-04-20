@@ -9,6 +9,7 @@ on:
 env:
     sdk-ver: '8.0.x'
     dir: "${{ github.workspace }}/bin/Release/net8.0"
+    inno: 6.4.2
 
 jobs:
     buildWin:
@@ -37,24 +38,34 @@ jobs:
                 mkdir -p winx64/
                 cd winx64/
                 copy -r "${{ env.pub_dir }}/*"
-                cd ${{ github.workspace }}
                 
-            - name: publish arm64
-              env:
-                pub_dir: ${{ env.dir }}/win-arm64/publish
+            # - name: publish arm64
+            #   env:
+            #     pub_dir: ${{ env.dir }}/win-arm64/publish
+            #   run: |
+            #     dotnet publish -c Release -r win-arm64 --self-contained true
+            #     cd out/
+            #     mkdir -p winarm64/
+            #     cd winarm64/
+            #     copy -r "${{ env.pub_dir }}/*"
+              
+            - name: build installer - win-x64
               run: |
-                dotnet publish -c Release -r win-arm64 --self-contained true
-                cd out/
-                mkdir -p winarm64/
-                cd winarm64/
-                copy -r "${{ env.pub_dir }}/*"
-                cd ${{ github.workspace }}
+                cd ${{ github.workspace }}/packaging/exe-x64
+                
+                copy -r "${{ github.workspace }}/out/winx64/*"
+
+                curl https://mlaan2.home.xs4all.nl/ispack/innosetup-${{ env.inno }}.exe --output innosetup.exe
+                Start-Process .\innotsetup.exe /VERYSILENT -Wait
+
+                cd "C:\Program Files (x86)\Inno Setup 6"
+                iscc "${{ github.workspace }}/packaging/exe/installer.iss"
 
             - name: upload artifacts
               uses: actions/upload-artifact@v4
               with:
                 name: windows
-                path: out/*
+                path: ${{ github.workspace }}/packaging/exe/UKMCL-Windows-Installer-en_US.exe
 # must also zip all of this too
 # rid: mac: osx-x64, osx-arm64; win: win-x64, win-x86, win-arm64; lin: linux-x64, linux-arm, linux-arm64, linux-musl-x64
 # For linux distributions, appimage for ubuntu, dpkg-deb for debian, flatpak for uni gui packaging, optional to snap
