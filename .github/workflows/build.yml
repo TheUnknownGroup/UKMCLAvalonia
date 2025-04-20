@@ -105,7 +105,7 @@ jobs:
           - name: upload artifacts
             uses: actions/upload-artifact@v4
             with:
-              name: wins x64
+              name: wins-x64
               path: |
                 ${{ github.workspace }}\packaging\exe-x64\${{ env.win-filename }}x64+0.0.0.exe
               retention-days: 1
@@ -113,7 +113,7 @@ jobs:
           - name: upload artifacts
             uses: actions/upload-artifact@v4
             with:
-              name: wins arm64
+              name: wins-arm64
               path: |
                 ${{ github.workspace }}\packaging\exe-arm64\${{ env.win-filename }}arm64+0.0.0.exe
               retention-days: 1
@@ -245,8 +245,8 @@ jobs:
           mkdir files/
           cp macs/*.dmg files/
           cp lins/*.deb files/
-          cp wins x64/*.exe files/
-          cp wins arm64/*.exe files/
+          cp wins-x64/*.exe files/
+          cp wins-arm64/*.exe files/
       
       - name: py install
         uses: actions/setup-python@v5
