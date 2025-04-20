@@ -13,6 +13,8 @@ env:
     lin-filename: "UKMCLAvalonia-Linux-Installer-en_US-"
     mac-filename: "UKMCLAvalonia-MacOS-Installer-en_US-"
     ver: "0.0.0-experimental+build.1"
+    py_ver: "3.13.2"
+    pre: true
 
 jobs:
   buildPublishers:
@@ -221,6 +223,98 @@ jobs:
             ${{ env.mac-filename }}x64.dmg
             ${{ env.mac-filename }}arm64.dmg
           retention-days: 1
+  sign:
+    if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
+
+    needs: [ buildPublishers, buildInstaller-Win, buildInstaller-Lin, buildInstaller-Mac ]
+
+    permissions:
+      contents: write
+      id-token: write
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: download stuff
+        uses: actions/download-artifact@v4
+        with:
+          name: |
+            macs
+            lins
+            wins x64
+            wins arm64
+
+      - run: |
+          mkdir files/
+          cp macs/*.dmg files/
+          cp lins/*.deb files/
+          cp wins x64/*.exe files/
+          cp wins arm64/*.exe files/
+      
+      - name: py install
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.py_ver }}
+
+      - name: verify py
+        run: python --version
+
+      - name: pip install
+        shell: pwsh
+        run: python -m ensurepip --upgrade
+      
+      - name: sign sigstore
+        uses: sigstore/gh-action-sigstore-python@v3.0.0
+        with:
+          inputs: |
+            files/*.exe
+            files/*.dmg
+            files/*.deb
+          verify: true
+          verify-cert-identity: https://github.com/TheUnknownGroup/UKMCLAvalonia/.github/workflows/build.yml@refs/heads/main
+          verify-oidc-issuer: https://token.actions.githubusercontent.com
+          upload-signing-artifacts: true
+          
+  release:
+    if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
+
+    needs: [ sign ]
+
+    permissions:
+      contents: write
+      id-token: write
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: download signed stuff
+        uses: actions/download-artifact@v4
+        with:
+          name: signing-artifacts-sign
+
+      - run: |
+          mkdir sign/
+          cp signing-artifacts/files/*.exe sign/
+          cp signing-artifacts/files/*.dmg sign/
+          cp signing-artifacts/files/*.deb sign/
+
+      - name: create release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: UKMCLAvalonia V${{ env.ver }}
+          tag_name: ${{ env.ver }}
+          body_path: ${{ github.workspace }}/changelog.md
+          generate_release_notes: true
+          prerelease: ${{ env.pre }}
+          files: |
+            sign/*.exe
+            sign/*.deb
+            sign/*.dmg
+
 # must also zip all of this too
 # rid: mac: osx-x64, osx-arm64; win: win-x64, win-arm64; lin: linux-x64, linux-arm64, linux-musl-x64
 # For linux distributions, appimage for ubuntu, dpkg-deb for debian, flatpak for uni gui packaging, optional to snap
