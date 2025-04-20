@@ -56,7 +56,7 @@ jobs:
                 copy -r "${{ github.workspace }}/out/winx64/*"
 
                 curl https://mlaan2.home.xs4all.nl/ispack/innosetup-${{ env.inno }}.exe --output innosetup.exe
-                Start-Process .\innotsetup.exe /VERYSILENT -Wait
+                Start-Process .\innosetup.exe /VERYSILENT -Wait
 
                 cd "C:\Program Files (x86)\Inno Setup 6"
                 iscc "${{ github.workspace }}/packaging/exe/installer.iss"
