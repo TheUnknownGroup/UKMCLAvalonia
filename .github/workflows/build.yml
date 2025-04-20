@@ -65,7 +65,12 @@ jobs:
           - uses: actions/download-artifact@v4
             with:
               name: out-win-x64
-              path: ${{ github.workspace }}\out
+              path: ${{ github.workspace }}\out\win-x64
+
+          - uses: actions/download-artifact@v4
+            with:
+              name: out-win-arm64
+              path: ${{ github.workspace }}\out\win-arm64
             
           - name: build installer x64
             run: |
@@ -78,11 +83,6 @@ jobs:
 
               cd "C:\Program Files (x86)\Inno Setup 6"
               iscc "${{ github.workspace }}\packaging\exe-x64\installer.iss"
-
-          - uses: actions/download-artifact@v4
-            with:
-              name: out-win-arm64
-              path: ${{ github.workspace }}\out
               
           - name: build installer arm64
             run: |
