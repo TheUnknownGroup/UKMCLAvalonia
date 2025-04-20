@@ -39,23 +39,14 @@ jobs:
 
       - name: publish
         run: |
-          dotnet publish -c Release -r ${{ matrix.os }} --self-contained true
-          mkdir -p out/${{ matrix.os }}/
-          cd out/${{ matrix.os }}/
-          cp -r ${{ env.dir }}/${{ matrix.os }}/publish/. ./
+          dotnet publish -c Release -r ${{ matrix.os }} --self-contained true -o out/${{ matrix.os }}
 
       - name: upload ${{ matrix.os }}
         uses: actions/upload-artifact@v4
         with:
           name: out
           path: |
-            out/win-x64/*
-            out/win-arm64/*
-            out/linux-x64/*
-            out/linux-arm64/*
-            out/linux-musl-x64/*
-            out/osx-x64/*
-            out/osx-arm64/*
+            out/${{ matrix.os }}/
           retention-days: 1
 
   buildInstaller-Win:
