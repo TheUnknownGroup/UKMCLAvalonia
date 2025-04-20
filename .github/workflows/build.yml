@@ -32,14 +32,14 @@ jobs:
           dotnet publish -c Release -r win-x64 --self-contained true
           mkdir -p out/win-x64/
           cd out/win-x64/
-          cp -r ${{ env.dir }}/win-x64/publish/*.exe ./
+          cp -r ${{ env.dir }}/win-x64/publish/. ./
           
       - name: publish arm64
         run: |
           dotnet publish -c Release -r win-arm64 --self-contained true
           mkdir -p out/win-arm64/
           cd out/win-arm64/
-          cp -r "${{ env.dir }}/win-arm64/publish/" ./
+          cp -r ${{ env.dir }}/win-arm64/publish/. ./
 
       - name: upload
         uses: actions/upload-artifact@v4
