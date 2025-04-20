@@ -9,6 +9,8 @@ on:
 env:
     sdk-ver: '8.0.x'
     dir: "${{ github.workspace }}/bin/Release/net8.0"
+    filename: "UKMCLAvalonia"
+    ver: "0.0.0-experimental+build.1"
 
 jobs:
   buildPublishers:
@@ -20,7 +22,7 @@ jobs:
     
     strategy:
       matrix:
-        os: [win-x64, win-arm64, linux-x64, linux-arm64, linux-musl-x64, osx-x64, osx-arm64]
+        os: [win-x64, win-arm64, linux-x64, linux-arm64, osx-x64, osx-arm64]
 
     runs-on: ubuntu-latest
     steps:
@@ -118,8 +120,42 @@ jobs:
       steps:
           - uses: actions/checkout@v4
 
-          - name: make installer
-            run: echo 'Hi'
+          - uses: actions/download-artifact@v4
+            with:
+              name: out-linux-arm64
+              path: ${{ github.workspace }}/out/linux-arm64
+          
+          - uses: actions/download-artifact@v4
+            with:
+              name: out-linux-x64
+              path: ${{ github.workspace }}/out/linux-x64
+
+          - name: build installer .deb x64
+            run: |
+              cd packaging/deb-x64/usr
+              mkdir -p share/UKMCL/
+              cd ${{ github.workspace }}
+              cp -r ${{ github.workspace }}/out/linux-x64 packaging/deb-x64/usr/share/UKMCL/
+              sed -i 's/${VERSION}/${{ env.ver }}/g' packaging/deb-x64/DEBIAN/control
+              fakeroot dpkg-deb --build packaging/deb-x64 "UKMCL-Linux-Installer-en_US-x64.deb"
+
+          - name: build installer .deb arm64
+            run: |
+              cd packaging/deb-arm64/usr
+              mkdir -p share/UKMCL/
+              cd ${{ github.workspace }}
+              cp -r ${{ github.workspace }}/out/linux-arm64 packaging/deb-arm64/usr/share/UKMCL/
+              sed -i 's/${VERSION}/${{ env.ver }}/g' packaging/deb-arm64/DEBIAN/control
+              fakeroot dpkg-deb --build packaging/deb-arm64 "UKMCL-Linux-Installer-en_US-arm64.deb"
+
+          - name: upload .deb's
+            uses: actions/upload-artifact@v4
+            with:
+              name: lins
+              path: |
+                ${{ github.workspace }}/packaging/deb-arm64/*.deb
+                ${{ github.workspace }}/packaging/deb-x64/*.deb
+
 
 
 # must also zip all of this too

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>ukmclavalonia</id>
+    <name>UKMCLAvalonia</name>
+    <summary>This is the Minecraft Launcher for and by the Unknown Group.</summary>
+    <developer_name>devonk15</developer_name>
+    <metadata_license>MIT</metadata_license>
+    <project_license>MIT</project_license>
+    <url type="homepage">https://github.com/TheUnknownGroup/UKMCLAvalonia</url>
+    <description>
+        <p>This is the Minecraft Launcher for and by the Unknown Group.</p>
+    </description>
+
+    <releases>
+        <release version="0.0.0-experimental+0-beta.1" date="2025-04-20" />
+    </releases>
+
+    <launchable type="desktop-id">ukmclavalonia.desktop</launchable>
+    <content_rating type="oars-1.1" />
+
+</component>
