@@ -34,7 +34,7 @@ jobs:
                 pub_dir: ${{ env.dir }}/win-x64/publish
               run: |
                 dotnet publish -c Release -r win-x64 --self-contained true
-                mkdir publish/win-x64
+                mkdir publish/win-x64/
                 cd publish/win-x64/
                 copy -r "${{ env.pub_dir }}/*"
                 cd ${{ github.workspace }}
@@ -44,7 +44,7 @@ jobs:
                 pub_dir: ${{ env.dir }}/win-arm64/publish
               run: |
                 dotnet publish -c Release -r win-arm64 --self-contained true
-                mkdir publish/win-arm64
+                mkdir publish/win-arm64/
                 cd publish/win-arm64/
                 copy -r "${{ env.pub_dir }}/*"
                 cd ${{ github.workspace }}
