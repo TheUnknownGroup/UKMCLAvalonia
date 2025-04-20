@@ -14,7 +14,7 @@
 		<Style Selector="Window.main">
 			<Setter Property="Background">
 				<Setter.Value>
-					<ImageBrush Source="avares://UKMCLAvalonia-Windows-en_US+0.0.0/Assets/background.png" 
+					<ImageBrush Source="avares://UKMCLAvalonia/Assets/background.png"
 								Stretch="UniformToFill"/>
 				</Setter.Value>
 			</Setter>

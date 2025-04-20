@@ -14,8 +14,7 @@ public static class MessageBoxManager
             Height = 150,
             CanResize = false,
             WindowStartupLocation = WindowStartupLocation.CenterOwner,
-            HorizontalContentAlignment = HorizontalAlignment.Center,
-            Icon = new WindowIcon("../../../Assets/icon.png")
+            HorizontalContentAlignment = HorizontalAlignment.Center
         };
         var okButton = new Button
         {

@@ -6,7 +6,8 @@
         x:Class="UKMCLAvalonia.MainWindow"
         Title="UKMCL Avalonia"
 	    mc:Ignorable="d"
-		CanResize="false">
+		CanResize="false"
+		Icon="avares://UKMCLAvalonia/Assets/icon.png">
 	<DockPanel>
 		<!-- left top bottom right -->
 		<ToggleSwitch DockPanel.Dock="Top" x:Name="ThemeT" Margin="15, 15, 0, 0"

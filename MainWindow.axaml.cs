@@ -11,7 +11,6 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        Icon = new WindowIcon("../../../Assets/icon.png");
         this.Classes.Add("main");
     }
     private void OnHelloClick(object? sender, RoutedEventArgs e)
@@ -26,5 +25,4 @@ public partial class MainWindow : Window
         Application.Current!.RequestedThemeVariant =
             isDark ? ThemeVariant.Dark : ThemeVariant.Light;
     }
-
 }

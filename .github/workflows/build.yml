@@ -83,7 +83,7 @@ jobs:
 
             - name: publish
               env:
-                pub_dir: ${{ env.dir }}/linux-x64/publish
+                pub_dir: ${{ env.dir }}/linux-x64/publish/
               run: |
                 dotnet publish -c Release -r linux-x64 --self-contained true
                 mkdir -p out/linx64/
