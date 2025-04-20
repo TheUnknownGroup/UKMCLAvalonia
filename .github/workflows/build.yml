@@ -47,7 +47,7 @@ jobs:
 
             - name: check dependencies
               run: |
-                sudo apt show dotnet-runtime-deps-8.0
+                apt show dotnet-runtime-deps-8.0
 
             - name: install known dependencies
               run: |
