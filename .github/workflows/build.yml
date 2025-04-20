@@ -9,9 +9,9 @@ on:
 env:
     sdk-ver: '8.0.x'
     dir: "${{ github.workspace }}/bin/Release/net8.0"
-    win-filename: "UKMCLAvalonia-Windows-Installer-en_US"
-    lin-filename: "UKMCLAvalonia-Linux-Installer-en_US"
-    mac-filename: "UKMCLAvalonia-MacOS-Installer-en_US"
+    win-filename: "UKMCLAvalonia-Windows-Installer-en_US-"
+    lin-filename: "UKMCLAvalonia-Linux-Installer-en_US-"
+    mac-filename: "UKMCLAvalonia-MacOS-Installer-en_US-"
     ver: "0.0.0-experimental+build.1"
 
 jobs:
@@ -105,8 +105,8 @@ jobs:
             with:
               name: wins
               path: |
-                ${{ github.workspace }}\packaging\exe-x64\${{ env.win-filename }}-x64+0.0.0.exe
-                ${{ github.workspace }}\packaging\exe-arm64\${{ env.win-filename }}-arm64+0.0.0.exe
+                ${{ github.workspace }}\packaging\exe-x64\${{ env.win-filename }}x64+0.0.0.exe
+                ${{ github.workspace }}\packaging\exe-arm64\${{ env.win-filename }}arm64+0.0.0.exe
               retention-days: 1
 
   buildInstaller-Lin:
@@ -139,7 +139,7 @@ jobs:
               cd ${{ github.workspace }}
               cp -r ${{ github.workspace }}/out/linux-x64 packaging/deb-x64/usr/share/UKMCL/
               sed -i 's/${VERSION}/${{ env.ver }}/g' packaging/deb-x64/DEBIAN/control
-              fakeroot dpkg-deb --build packaging/deb-x64 "${{ env.lin-filename }}-x64.deb"
+              fakeroot dpkg-deb --build packaging/deb-x64 "${{ env.lin-filename }}x64.deb"
 
           - name: build installer .deb arm64
             run: |
@@ -148,15 +148,15 @@ jobs:
               cd ${{ github.workspace }}
               cp -r ${{ github.workspace }}/out/linux-arm64 packaging/deb-arm64/usr/share/UKMCL/
               sed -i 's/${VERSION}/${{ env.ver }}/g' packaging/deb-arm64/DEBIAN/control
-              fakeroot dpkg-deb --build packaging/deb-arm64 "${{ env.lin-filename }}-arm64.deb"
+              fakeroot dpkg-deb --build packaging/deb-arm64 "${{ env.lin-filename }}arm64.deb"
 
           - name: upload .deb's
             uses: actions/upload-artifact@v4
             with:
               name: lins
               path: |
-                ${{ env.lin-filename }}-x64.deb
-                ${{ env.lin-filename }}-arm64.deb
+                ${{ env.lin-filename }}x64.deb
+                ${{ env.lin-filename }}arm64.deb
 
 
 

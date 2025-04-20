@@ -1,11 +1,11 @@
-#define Name "UKMCL"
+#define Name "UKMCLAvalonia"
 #define Publisher "TheUnknownGroup <owner@thegremlinx.xyz>"
-#define URL "https://github.com/TheUnknownGroup/UKMCL"
+#define URL "https://github.com/TheUnknownGroup/UKMCLAvalonia"
 #define ExeName "UKMCLAvalonia.exe"
 #define Version "v0.0.0"
 
 #define PackagingDir "./"
-#define BaseFilename "UKMCL-Windows-Installer-en_US-arm64+0.0.0"
+#define BaseFilename "UKMCLAvalonia-Windows-Installer-en_US-x64+0.0.0"
 
 [Setup]
 AppName={#Name}
@@ -15,7 +15,7 @@ AppPublisher={#Publisher}
 AppPublisherURL={#URL}
 AppSupportURL={#URL}
 AppUpdatesURL={#URL}
-DefaultDirName={localappdata}\{#Name}
+DefaultDirName={localappdata}\Programs\{#Name}
 DisableProgramGroupPage=yes
 OutputDir=.
 OutputBaseFilename={#BaseFilename}
