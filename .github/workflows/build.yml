@@ -11,15 +11,13 @@ env:
     dir: "${{ github.workspace }}/bin/Release/net8.0"
 
 jobs:
-    buildPublishers:
+    buildPublishers-Win:
       if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
 
       strategy:
         matrix:
-          os: [win-x64, win-arm64, linux-x64, linux-arm64, linux-musl-x64, osx-x64, osx-arm64]
-          linux: [linux-x64, linux-arm64, linux-musl-x64]
-          files: [win-x64, win-arm64, lin-x64, lin-arm64, lin-musl-x64, mac-x64, mac-arm64]
-          folders: [wins, lins, macs]
+          os: [win-x64, win-arm64]
+          files: [win-x64, win-arm64]
 
       permissions:
           contents: write
@@ -34,12 +32,83 @@ jobs:
           with:
             dotnet-version: ${{ env.sdk-ver }}
 
-        - name: install dependencies
-          if: ${{ matrix.linux }}
+        - name: publish
+          env:
+            pub_dir: ${{ env.dir }}/${{ matrix.os }}/publish
           run: |
-              sudo apt-get update
-              sudo apt-get install -y libc6 libx11-6 libice6 libsm6 \
-              libfontconfig libgcc-s1 libssl3 libstdc++6 tzdata zlib1g
+            dotnet publish -c Release -r ${{ matrix.os }} --self-contained true
+            mkdir -p out/${{ matrix.files }}
+            cp -r "${{ env.pub_dir }}/*" out/${{ matrix.files }}
+
+        - name: upload
+          uses: actions/upload-artifact@v4
+          with:
+            name: wins
+            path: out/${{ matrix.files }}
+
+    buildPublishers-Lin:
+      if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
+
+      permissions:
+        contents: write
+        id-token: write
+
+      strategy:
+        matrix:
+          os: [linux-x64, linux-arm64, linux-musl-x64]
+          files: [lin-x64, lin-arm64, lin-musl-x64]
+
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+
+        - name: setup .net sdk
+          uses: actions/setup-dotnet@v4
+          with:
+            dotnet-version: ${{ env.sdk-ver }}
+
+        - name: install dependencies
+          run: |
+            sudo apt-get update
+            sudo apt-get install -y libc6 libx11-6 libice6 libsm6 \
+            libfontconfig libgcc-s1 libssl3 libstdc++6 tzdata zlib1g
+
+        - name: publish
+          env:
+            pub_dir: ${{ env.dir }}/${{ matrix.os }}/publish
+          run: |
+            dotnet publish -c Release -r ${{ matrix.os }} --self-contained true
+            mkdir -p out/${{ matrix.files }}
+            cp -r "${{ env.pub_dir }}/*" out/${{ matrix.files }}
+
+
+        - name: upload
+          uses: actions/upload-artifact@v4
+          with:
+            name: lins
+            path: out/${{ matrix.files }}
+
+
+    buildPublishers-Mac:
+      if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
+
+      permissions:
+        contents: write
+        id-token: write
+
+      strategy:
+        matrix:
+          os: [osx-x64, osx-arm64]
+          files: [mac-x64, mac-arm64]
+
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+
+        - name: setup .net sdk
+          uses: actions/setup-dotnet@v4
+          with:
+            dotnet-version: ${{ env.sdk-ver }}
 
         - name: publish
           env:
@@ -52,13 +121,13 @@ jobs:
         - name: upload
           uses: actions/upload-artifact@v4
           with:
-            name: ${{ matrix.folders }}
+            name: macs
             path: out/${{ matrix.files }}
 
     buildWin:
         if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
 
-        needs: [buildPublishers]
+        needs: [buildPublishers-Win]
 
         permissions:
             contents: write
@@ -104,7 +173,7 @@ jobs:
     buildLin:
         if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
         
-        needs: [buildPublishers]
+        needs: [buildPublishers-Lin]
 
         permissions:
             contents: write
@@ -113,10 +182,3 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
-
-            - name: upload artifacts
-              uses: actions/upload-artifact@v4
-              with:
-                name: lins
-                path: out/
-                retention-days: 1
