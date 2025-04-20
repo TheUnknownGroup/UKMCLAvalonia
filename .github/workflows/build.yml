@@ -44,7 +44,7 @@ jobs:
       - name: upload ${{ matrix.os }}
         uses: actions/upload-artifact@v4
         with:
-          name: out ${{ matrix.os }}
+          name: out-${{ matrix.os }}
           path: |
             out/${{ matrix.os }}/
           retention-days: 1
@@ -64,9 +64,7 @@ jobs:
 
           - uses: actions/download-artifact@v4
             with:
-              name: |
-                out win-x64
-                out win-arm64
+              name: out-win-x64
               path: ${{ github.workspace }}\out
             
           - name: build installer x64
@@ -80,6 +78,11 @@ jobs:
 
               cd "C:\Program Files (x86)\Inno Setup 6"
               iscc "${{ github.workspace }}\packaging\exe-x64\installer.iss"
+
+          - uses: actions/download-artifact@v4
+            with:
+              name: out-win-arm64
+              path: ${{ github.workspace }}\out
               
           - name: build installer arm64
             run: |
