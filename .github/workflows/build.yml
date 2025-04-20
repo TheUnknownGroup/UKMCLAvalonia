@@ -18,6 +18,10 @@ jobs:
         contents: write
         id-token: write
     
+    strategy:
+      matrix:
+        os: [win-x64, win-arm64, linux-x64, linux-arm64, linux-musl-x64, osx-x64, osx-arm64]
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,65 +31,23 @@ jobs:
         with:
           dotnet-version: ${{ env.sdk-ver }}
 
-      - name: publish win-x64
-        run: |
-          dotnet publish -c Release -r win-x64 --self-contained true
-          mkdir -p out/win-x64/
-          cd out/win-x64/
-          cp -r ${{ env.dir }}/win-x64/publish/. ./
-          
-      - name: publish win-arm64
-        run: |
-          dotnet publish -c Release -r win-arm64 --self-contained true
-          mkdir -p out/win-arm64/
-          cd out/win-arm64/
-          cp -r ${{ env.dir }}/win-arm64/publish/. ./
-
       - name: install linux dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libc6 libx11-6 libice6 libsm6 \
           libfontconfig libgcc-s1 libssl3 libstdc++6 tzdata zlib1g
 
-      - name: publish lin-x64
+      - name: publish
         run: |
-          dotnet publish -c Release -r linux-x64 --self-contained true
-          mkdir -p out/lin-x64/
-          cd out/lin-x64/
-          cp -r ${{ env.dir }}/linux-x64/publish/. ./
-
-      - name: publish lin-arm64
-        run: |
-          dotnet publish -c Release -r linux-arm64 --self-contained true
-          mkdir -p out/lin-arm64/
-          cd out/lin-arm64/
-          cp -r ${{ env.dir }}/linux-arm64/publish/. ./
-
-      - name: publish lin-musl-x64
-        run: |
-          dotnet publish -c Release -r linux-musl-x64 --self-contained true
-          mkdir -p out/lin-musl-x64/
-          cd out/lin-musl-x64/
-          cp -r ${{ env.dir }}/linux-musl-x64/publish/. ./
-
-      - name: publish osx-x64
-        run: |
-          dotnet publish -c Release -r osx-x64 --self-contained true
-          mkdir -p out/mac-x64/
-          cd out/mac-x64
-          cp -r ${{ env.dir }}/osx-x64/publish/. ./
-          
-      - name: publish osx-arm64
-        run: |
-          dotnet publish -c Release -r osx-arm64 --self-contained true
-          mkdir -p out/mac-arm64/
-          cd out/mac-arm64
-          cp -r ${{ env.dir }}/osx-arm64/publish/. ./
+          dotnet publish -c Release -r ${{ matrix.os }} --self-contained true
+          mkdir -p out/${{ matrix.os }}/
+          cd out/${{ matrix.os }}/
+          cp -r ${{ env.dir }}/${{ matrix.os }}/publish/. ./
 
       - name: upload
         uses: actions/upload-artifact@v4
         with:
-          name: out-win
+          name: out
           path: |
             out/*
           retention-days: 1
