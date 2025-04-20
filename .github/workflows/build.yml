@@ -50,21 +50,21 @@ jobs:
               
             - name: build installer - win-x64
               run: |
-                cd ${{ github.workspace }}/packaging/exe-x64
+                cd ${{ github.workspace }}\packaging\exe-x64
                 
-                copy -r "${{ github.workspace }}/out/winx64/*"
+                copy -r "${{ github.workspace }}\out\winx64\*"
 
                 curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.2.1.exe --output innosetup.exe
                 Start-Process .\innosetup.exe /VERYSILENT -Wait
 
                 cd "C:\Program Files (x86)\Inno Setup 6"
-                iscc "${{ github.workspace }}/packaging/exe/installer.iss"
+                iscc "${{ github.workspace }}\packaging\exe-x64\installer.iss"
 
             - name: upload artifacts
               uses: actions/upload-artifact@v4
               with:
                 name: windows
-                path: ${{ github.workspace }}/packaging/exe/UKMCL-Windows-Installer-en_US.exe
+                path: ${{ github.workspace }}\packaging\exe-x64\UKMCL-Windows-Installer-en_US.exe
                 retention-days: 1
 # must also zip all of this too
 # rid: mac: osx-x64, osx-arm64; win: win-x64, win-x86, win-arm64; lin: linux-x64, linux-arm, linux-arm64, linux-musl-x64
