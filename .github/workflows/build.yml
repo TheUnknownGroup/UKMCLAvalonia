@@ -103,9 +103,16 @@ jobs:
           - name: upload artifacts
             uses: actions/upload-artifact@v4
             with:
-              name: wins
+              name: wins x64
               path: |
                 ${{ github.workspace }}\packaging\exe-x64\${{ env.win-filename }}x64+0.0.0.exe
+              retention-days: 1
+              
+          - name: upload artifacts
+            uses: actions/upload-artifact@v4
+            with:
+              name: wins arm64
+              path: |
                 ${{ github.workspace }}\packaging\exe-arm64\${{ env.win-filename }}arm64+0.0.0.exe
               retention-days: 1
 
@@ -158,8 +165,60 @@ jobs:
                 ${{ env.lin-filename }}x64.deb
                 ${{ env.lin-filename }}arm64.deb
 
+  buildInstaller-Mac:
+    if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
+      
+    needs: [buildPublishers]
 
+    permissions:
+        contents: write
+        id-token: write
 
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: out-osx-x64
+          path: ${{ github.workspace }}/out/osx-x64
+          
+      - uses: actions/download-artifact@v4
+        with:
+          name: out-osx-arm64
+          path: ${{ github.workspace }}/out/osx-arm64
+
+      - name: build install .dmg x64
+        run: |
+          mkdir -p UKMCLAvalonia-x64.app
+          mkdir -p UKMCLAvalonia-x64.app/Contents/Resources
+          mkdir -p UKMCLAvalonia-x64.app/Contents/MacOS/
+          cd UKMCLAvalonia-x64.app/Contents/MacOS/
+          cp -r ${{ github.workspace }}/out/osx-x64/. ./
+          cp -r ${{ github.workspace }}/Assets/icon.icns ../Resources/
+          cd ${{ github.workspace }}
+          hdiutil create -volname "UKMCLAvalonia-x64" -srcfolder "UKMCLAvalonia-x64.app" -ov -format UDZO ${{ env.mac-filename }}x64.dmg
+        continue-on-error: true
+
+      - name: build install .dmg arm64
+        run: |
+          mkdir -p UKMCLAvalonia-arm64.app
+          mkdir -p UKMCLAvalonia-arm64.app/Contents/Resources
+          mkdir -p UKMCLAvalonia-arm64.app/Contents/MacOS/
+          cd UKMCLAvalonia-arm64.app/Contents/MacOS/
+          cp -r ${{ github.workspace }}/out/osx-arm64/. ./
+          cp -r ${{ github.workspace }}/Assets/icon.icns ../Resources/
+          cd ${{ github.workspace }}
+          hdiutil create -volname "UKMCLAvalonia-arm64" -srcfolder "UKMCLAvalonia-arm64.app" -ov -format UDZO ${{ env.mac-filename }}arm64.dmg
+        continue-on-error: true
+
+      - name: upload .dmg's
+        uses: actions/upload-artifact@v4
+        with:
+          name: macs
+          path: |
+            ${{ env.mac-filename }}x64.dmg
+            ${{ env.mac-filename }}arm64.dmg
 # must also zip all of this too
 # rid: mac: osx-x64, osx-arm64; win: win-x64, win-arm64; lin: linux-x64, linux-arm64, linux-musl-x64
 # For linux distributions, appimage for ubuntu, dpkg-deb for debian, flatpak for uni gui packaging, optional to snap
