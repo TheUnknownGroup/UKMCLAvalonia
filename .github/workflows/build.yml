@@ -29,19 +29,25 @@ jobs:
 
       - name: publish x64
         env:
-          pub_dir: ${{ env.dir }}/win-x64/publish/*
+          pub_dir: ${{ env.dir }}/win-x64/publish
         run: |
           dotnet publish -c Release -r win-x64 --self-contained true
           mkdir -p out/win-x64/
-          cp -r "${{ env.pub_dir }}" out/win-x64/
+          cp -r "${{ env.pub_dir }}/*.exe" out/win-x64/
+          cp -r "${{ env.pub_dir }}/*.dll" out/win-x64/
+          cp -r "${{ env.pub_dir }}/*.json" out/win-x64/
+          cp -r "${{ env.pub_dir }}/*.pdb" out/win-x64/
           
       - name: publish arm64
         env:
-          pub_dir: ${{ env.dir }}/win-arm64/publish/*
+          pub_dir: ${{ env.dir }}/win-arm64/publish
         run: |
           dotnet publish -c Release -r win-arm64 --self-contained true
           mkdir -p out/win-arm64/
-          cp -r "${{ env.pub_dir }}" out/win-arm64/
+          cp -r "${{ env.pub_dir }}/*.exe" out/win-arm64/
+          cp -r "${{ env.pub_dir }}/*.dll" out/win-arm64/
+          cp -r "${{ env.pub_dir }}/*.json" out/win-arm64/
+          cp -r "${{ env.pub_dir }}/*.pdb" out/win-arm64/
 
       - name: upload
         uses: actions/upload-artifact@v4
@@ -75,27 +81,39 @@ jobs:
 
       - name: publish x64
         env:
-          pub_dir: ${{ env.dir }}/linux-x64/publish/*
+          pub_dir: ${{ env.dir }}/linux-x64/publish
         run: |
           dotnet publish -c Release -r linux-x64 --self-contained true
           mkdir -p out/lin-x64/
-          cp -r "${{ env.pub_dir }}" out/lin-x64
+          cp -r "${{ env.pub_dir }}/*.dll" out/lin-x64
+          cp -r "${{ env.pub_dir }}/*.so" out/lin-x64
+          cp -r "${{ env.pub_dir }}/UKMCLAvalonia" out/lin-x64
+          cp -r "${{ env.pub_dir }}/*.pdb" out/lin-x64
+          cp -r "${{ env.pub_dir }}/*.json" out/lin-x64
           
       - name: publish arm64
         env:
-          pub_dir: ${{ env.dir }}/linux-arm64/publish/*
+          pub_dir: ${{ env.dir }}/linux-arm64/publish
         run: |
           dotnet publish -c Release -r linux-arm64 --self-contained true
           mkdir -p out/lin-arm64/
-          cp -r "${{ env.pub_dir }}" out/lin-arm64
+          cp -r "${{ env.pub_dir }}/*.dll" out/lin-arm64
+          cp -r "${{ env.pub_dir }}/*.so" out/lin-arm64
+          cp -r "${{ env.pub_dir }}/UKMCLAvalonia" out/lin-arm64
+          cp -r "${{ env.pub_dir }}/*.pdb" out/lin-arm64
+          cp -r "${{ env.pub_dir }}/*.json" out/lin-arm64
           
       - name: publish musl-x64
         env:
-          pub_dir: ${{ env.dir }}/linux-musl-x64/publish/*
+          pub_dir: ${{ env.dir }}/linux-musl-x64/publish
         run: |
           dotnet publish -c Release -r linux-musl-x64 --self-contained true
           mkdir -p out/lin-musl-x64/
-          cp -r "${{ env.pub_dir }}" out/lin-musl-x64
+          cp -r "${{ env.pub_dir }}/*.so" out/lin-musl-x64/
+          cp -r "${{ env.pub_dir }}/*.dll" out/lin-musl-x64/
+          cp -r "${{ env.pub_dir }}/UKMCLAvalonia" out/lin-musl-x64/
+          cp -r "${{ env.pub_dir }}/*.pdb" out/lin-musl-x64/
+          cp -r "${{ env.pub_dir }}/*.json" out/lin-musl-x64/
 
 
       - name: upload
@@ -115,11 +133,6 @@ jobs:
       contents: write
       id-token: write
 
-    strategy:
-      matrix:
-        os: [osx-x64, osx-arm64]
-        files: [mac-x64, mac-arm64]
-
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -131,19 +144,27 @@ jobs:
 
       - name: publish
         env:
-          pub_dir: ${{ env.dir }}/osx-x64/publish/*
+          pub_dir: ${{ env.dir }}/osx-x64/publish
         run: |
           dotnet publish -c Release -r osx-x64 --self-contained true
           mkdir -p out/mac-x64
-          cp -r "${{ env.pub_dir }}" out/mac-x64
+          cp -r "${{ env.pub_dir }}/*.dylib" out/mac-x64
+          cp -r "${{ env.pub_dir }}/*.dll" out/mac-x64
+          cp -r "${{ env.pub_dir }}/UKMCLAvalonia" out/mac-x64
+          cp -r "${{ env.pub_dir }}/*.pdb" out/mac-x64
+          cp -r "${{ env.pub_dir }}/*.json" out/mac-x64
           
       - name: publish
         env:
-          pub_dir: ${{ env.dir }}/osx-arm64/publish/*
+          pub_dir: ${{ env.dir }}/osx-arm64/publish
         run: |
           dotnet publish -c Release -r osx-arm64 --self-contained true
           mkdir -p out/mac-arm64
-          cp -r "${{ env.pub_dir }}" out/mac-arm64
+          cp -r "${{ env.pub_dir }}/*.dylib" out/mac-arm64
+          cp -r "${{ env.pub_dir }}/*.dll" out/mac-arm64
+          cp -r "${{ env.pub_dir }}/UKMCLAvalonia" out/mac-arm64
+          cp -r "${{ env.pub_dir }}/*.pdb" out/mac-arm64
+          cp -r "${{ env.pub_dir }}/*.json" out/mac-arm64
 
       - name: upload
         uses: actions/upload-artifact@v4
