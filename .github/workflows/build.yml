@@ -9,7 +9,7 @@ on:
 env:
     sdk-ver: '8.0.x'
     dir: "${{ github.workspace }}/bin/Release/net8.0"
-    inno: 6.4.2
+    inno: 6.2.1
 
 jobs:
     buildWin:
@@ -66,6 +66,7 @@ jobs:
               with:
                 name: windows
                 path: ${{ github.workspace }}/packaging/exe/UKMCL-Windows-Installer-en_US.exe
+                retention-days: 1
 # must also zip all of this too
 # rid: mac: osx-x64, osx-arm64; win: win-x64, win-x86, win-arm64; lin: linux-x64, linux-arm, linux-arm64, linux-musl-x64
 # For linux distributions, appimage for ubuntu, dpkg-deb for debian, flatpak for uni gui packaging, optional to snap
@@ -105,6 +106,7 @@ jobs:
               with:
                 name: linux
                 path: out/*
+                retention-days: 1
 
 
 # name: Build Avalonia App
