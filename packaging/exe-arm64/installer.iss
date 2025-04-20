@@ -1,11 +1,11 @@
 #define Name "UKMCL"
-#define Publisher "TheUnknownGroup - devonk15"
+#define Publisher "TheUnknownGroup <owner@thegremlinx.xyz>"
 #define URL "https://github.com/TheUnknownGroup/UKMCL"
 #define ExeName "UKMCLAvalonia.exe"
 #define Version "v0.0.0"
 
 #define PackagingDir "./"
-#define BaseFilename "UKMCL-Windows-Installer-en_US"
+#define BaseFilename "UKMCL-Windows-Installer-en_US-arm64+0.0.0"
 
 [Setup]
 AppName={#Name}
@@ -15,7 +15,7 @@ AppPublisher={#Publisher}
 AppPublisherURL={#URL}
 AppSupportURL={#URL}
 AppUpdatesURL={#URL}
-DefaultDirName={autopf}\{#Name}
+DefaultDirName={localappdata}\{#Name}
 DisableProgramGroupPage=yes
 OutputDir=.
 OutputBaseFilename={#BaseFilename}
@@ -41,12 +41,12 @@ Name: "{autodesktop}\{#Name}"; Filename: "{app}\{#ExeName}"; Tasks: desktopicon
 Type: files; Name: "{app}\*.exe"
 Type: files; Name: "{app}\*.dll"
 Type: files; Name: "{app}\*.json"
+Type: files; Name: "{app}\*.pdb"
 
 [Run]
 Filename: "{app}\{#ExeName}"; Description: "{cm:LaunchProgram,{#StringChange(Name, '&', '&&')}}"; Flags: nowait postinstall
 
 [Code]
-
 procedure CurPageChanged(CurPageID: Integer);
 begin
   if CurPageID = wpPreparing then
