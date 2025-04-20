@@ -8,7 +8,7 @@ on:
 
 env:
     sdk-ver: '8.0.x'
-    dir: "bin/Release/net8.0"
+    dir: "${{ github.workspace }}/bin/Release/net8.0"
 
 jobs:
     buildWin:
@@ -36,20 +36,19 @@ jobs:
                 cd out/
                 mkdir -p winx64/
                 cd winx64/
-            # copy -r "${{ env.pub_dir }}/*"
-            # cd ${{ github.workspace }}
+                copy -r "${{ env.pub_dir }}/*"
+                cd ${{ github.workspace }}
                 
             - name: publish arm64
               env:
                 pub_dir: ${{ env.dir }}/win-arm64/publish
               run: |
                 dotnet publish -c Release -r win-arm64 --self-contained true
-                mkdir -p out/
                 cd out/
                 mkdir -p winarm64/
                 cd winarm64/
-            # copy -r "${{ env.pub_dir }}/*"
-            # cd ${{ github.workspace }}
+                copy -r "${{ env.pub_dir }}/*"
+                cd ${{ github.workspace }}
 
             - name: upload artifacts
               uses: actions/upload-artifact@v4
@@ -84,7 +83,7 @@ jobs:
 
             - name: publish
               env:
-                pub_dir: ${{ env.dir }}/win-arm64/publish
+                pub_dir: ${{ env.dir }}/linux-x64/publish
               run: |
                 dotnet publish -c Release -r linux-x64 --self-contained true
                 mkdir -p out/linx64/
