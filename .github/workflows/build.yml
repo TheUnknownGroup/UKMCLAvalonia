@@ -155,8 +155,8 @@ jobs:
             with:
               name: lins
               path: |
-                packaging/deb-x64/${{ env.lin-filename }}-x64.deb
-                packaging/deb-arm64/${{ env.lin-filename }}-arm64.deb
+                ${{ env.lin-filename }}-x64.deb
+                ${{ env.lin-filename }}-arm64.deb
 
 
 
