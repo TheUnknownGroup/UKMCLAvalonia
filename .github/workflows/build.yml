@@ -186,7 +186,7 @@ jobs:
             run: |
               cd ${{ github.workspace }}\packaging\exe-x64
               
-              copy -r "out-win\win-x64\*"
+              copy -r "${{ github.workspace }}\out-win\win-x64\*"
 
               curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.2.1.exe --output innosetup.exe
               Start-Process .\innosetup.exe /VERYSILENT -Wait
@@ -198,7 +198,7 @@ jobs:
             run: |
               cd ${{ github.workspace }}\packaging\exe-arm64
               
-              copy -r "out-win\win-arm64\*"
+              copy -r "${{ github.workspace }}\out-win\win-arm64\*"
 
               curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.2.1.exe --output innosetup.exe
               Start-Process .\innosetup.exe /VERYSILENT -Wait
