@@ -89,6 +89,12 @@ jobs:
                 mkdir -p out/linx64/
                 cp -r "${{ env.pub_dir}}" out/linx64/
 
+            - name: upload artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                name: linux
+                path: out/*
+
 
 # name: Build Avalonia App
 

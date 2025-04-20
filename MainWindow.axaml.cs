@@ -3,7 +3,6 @@ using Avalonia.Interactivity;
 using Avalonia;
 using Avalonia.Styling;
 using UKMCLAvalonia.app;
-using System;
 
 namespace UKMCLAvalonia;
 
@@ -12,7 +11,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        Icon = new WindowIcon("../../../../../Assets/icon.png");
+        Icon = new WindowIcon("../../../Assets/icon.png");
         this.Classes.Add("main");
     }
     private void OnHelloClick(object? sender, RoutedEventArgs e)
