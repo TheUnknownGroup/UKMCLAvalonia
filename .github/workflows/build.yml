@@ -240,12 +240,6 @@ jobs:
 
       - name: download stuff
         uses: actions/download-artifact@v4
-        with:
-          name: |
-            macs
-            lins
-            wins x64
-            wins arm64
 
       - run: |
           mkdir files/
