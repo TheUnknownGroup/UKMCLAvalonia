@@ -32,7 +32,7 @@ jobs:
           dotnet publish -c Release -r win-x64 --self-contained true
           mkdir -p out/win-x64/
           cd out/win-x64/
-          cp -r ${{ env.dir }}/win-x64/publish/*.exe out/win-x64/
+          cp -r ${{ env.dir }}/win-x64/publish/*.exe ./
           
       - name: publish arm64
         run: |
