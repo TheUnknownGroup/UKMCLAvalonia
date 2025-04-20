@@ -28,6 +28,10 @@ jobs:
 
             - name: install dependencies
               run: |
+                    
+# must also zip all of this too
+# rid: mac: osx-x64, osx-arm64; win: win-x64, win-x86, win-arm64; lin: linux-x64, linux-arm, linux-arm64, linux-musl-x64
+# For linux distributions, appimage for ubuntu, dpkg-deb for debian, flatpak for uni gui packaging, optional to snap
 
     buildLin:
         if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
@@ -45,14 +49,14 @@ jobs:
               with:
                 dotnet-version: ${{ env.sdk-ver }}
 
-            - name: check dependencies
-              run: |
-                apt show dotnet-runtime-deps-8.0
-
             - name: install known dependencies
               run: |
                 sudo apt-get update
-                sudo apt-get install libx11-6 libice6 libsm6 libfontconfig libwebkit2gtk
+                sudo apt-get install -y libc6 libx11-6 \
+                libice6 libsm6 libfontconfig libwebkit2gtk \
+                libgcc-s1 libicu72 libssl3 libstdc++6 \
+                tzdata zlib1g libgcc libstdc++ zlib
+
   
 # name: Build Avalonia App
 
