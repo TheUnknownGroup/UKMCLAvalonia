@@ -32,7 +32,9 @@ jobs:
                 pub_dir: ${{ env.dir }}/win-x64/publish
               run: |
                 dotnet publish -c Release -r win-x64 --self-contained true
-                mkdir -p out/winx64/
+                mkdir -p out/
+                cd out/
+                mkdir -p winx64/
                 cd out/winx64/
             # copy -r "${{ env.pub_dir }}/*"
             # cd ${{ github.workspace }}
@@ -42,8 +44,10 @@ jobs:
                 pub_dir: ${{ env.dir }}/win-arm64/publish
               run: |
                 dotnet publish -c Release -r win-arm64 --self-contained true
-                mkdir -p out/winarm64/
-                cd out/winarm64/
+                mkdir -p out/
+                cd out/
+                mkdir -p winarm64/
+                cd winarm64/
             # copy -r "${{ env.pub_dir }}/*"
             # cd ${{ github.workspace }}
 
@@ -79,10 +83,15 @@ jobs:
                 libfontconfig libgcc-s1 libssl3 libstdc++6 tzdata zlib1g
 
             - name: publish
+              env:
+                pub_dir: ${{ env.dir }}/win-arm64/publish
               run: |
                 dotnet publish -c Release -r linux-x64 --self-contained true
                 mkdir -p out/linx64/
                 cd out/linx64/
+                cp -r "${{ env.pub_dir}}/*"
+                cd ${{ github.workspace }}
+
 
 # name: Build Avalonia App
 
