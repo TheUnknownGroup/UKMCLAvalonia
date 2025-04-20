@@ -2,7 +2,7 @@ Package: ukmcl
 Version: ${VERSION}
 Section: games
 Priority: optional
-Depends: libc6, libx11-6, libice6, libsm6, libfontconfig, libwebkit2gtk, libgcc-s1, libicu72, libssl3, libstdc++6, tzdata, zlib1g, libgcc, libstdc++, zlib
+Depends: libc6, libx11-6, libice6, libsm6, libfontconfig, libgcc-s1, libssl3, libstdc++6, tzdata, zlib1g,
 Maintainer: TheGremlinX <owner@thegremlinx.xyz>
 Homepage: https://web.thegremlinx.xyz/
 Architecture: amd64
