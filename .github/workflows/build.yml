@@ -44,11 +44,9 @@ jobs:
       - name: upload
         uses: actions/upload-artifact@v4
         with:
-          name: wins
+          name: out-win
           path: |
             out/*
-    # out/win-x64/*
-    # out/win-arm64/*
 
 #   buildPublishers-Lin:
 #     if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
@@ -167,58 +165,55 @@ jobs:
 #             out/mac-x64
 #             out/mac-arm64
 
-#   buildInstaller-Win:
-#       if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
+  buildInstaller-Win:
+      if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
 
-#       needs: [buildPublishers-Win]
+      needs: [buildPublishers-Win]
 
-#       permissions:
-#           contents: write
-#           id-token: write
+      permissions:
+          contents: write
+          id-token: write
       
-#       runs-on: windows-latest
-#       steps:
-#           - uses: actions/checkout@v4
+      runs-on: windows-latest
+      steps:
+          - uses: actions/checkout@v4
 
-#           - uses: actions/download-artifact@v4
-#             with:
-#               path: ${{ github.workspace }}\published
+          - uses: actions/download-artifact@v4
+            with:
+              name: out-win
             
-#           - name: build installer x64
-#             run: |
-#               cd ${{ github.workspace }}\packaging\exe-x64
+          - name: build installer x64
+            run: |
+              cd ${{ github.workspace }}\packaging\exe-x64
               
-#               copy -r "${{ github.workspace }}\out\win-x64\*"
+              copy -r "out-win\win-x64\*"
 
-#               curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.2.1.exe --output innosetup.exe
-#               Start-Process .\innosetup.exe /VERYSILENT -Wait
+              curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.2.1.exe --output innosetup.exe
+              Start-Process .\innosetup.exe /VERYSILENT -Wait
 
-#               cd "C:\Program Files (x86)\Inno Setup 6"
-#               iscc "${{ github.workspace }}\packaging\exe-x64\installer.iss"
+              cd "C:\Program Files (x86)\Inno Setup 6"
+              iscc "${{ github.workspace }}\packaging\exe-x64\installer.iss"
               
-#           - name: build installer arm64
-#             run: |
-#               cd ${{ github.workspace }}\packaging\exe-arm64
+          - name: build installer arm64
+            run: |
+              cd ${{ github.workspace }}\packaging\exe-arm64
               
-#               copy -r "${{ github.workspace }}\out\win-arm64\*"
+              copy -r "out-win\win-arm64\*"
 
-#               curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.2.1.exe --output innosetup.exe
-#               Start-Process .\innosetup.exe /VERYSILENT -Wait
+              curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.2.1.exe --output innosetup.exe
+              Start-Process .\innosetup.exe /VERYSILENT -Wait
 
-#               cd "C:\Program Files (x86)\Inno Setup 6"
-#               iscc "${{ github.workspace }}\packaging\exe-arm64\installer.iss"
+              cd "C:\Program Files (x86)\Inno Setup 6"
+              iscc "${{ github.workspace }}\packaging\exe-arm64\installer.iss"
 
-#           - name: upload artifacts
-#             uses: actions/upload-artifact@v4
-#             with:
-#               name: wins
-#               path: |
-#                 ${{ github.workspace }}\packaging\exe-x64\UKMCL-Windows-Installer-en_US-x64+0.0.0.exe
-#                 ${{ github.workspace }}\packaging\exe-arm64\UKMCL-Windows-Installer-en_US-arm64+0.0.0.exe
-#               retention-days: 1
-# # must also zip all of this too
-# # rid: mac: osx-x64, osx-arm64; win: win-x64, win-arm64; lin: linux-x64, linux-arm64, linux-musl-x64
-# # For linux distributions, appimage for ubuntu, dpkg-deb for debian, flatpak for uni gui packaging, optional to snap
+          - name: upload artifacts
+            uses: actions/upload-artifact@v4
+            with:
+              name: wins
+              path: |
+                ${{ github.workspace }}\packaging\exe-x64\UKMCL-Windows-Installer-en_US-x64+0.0.0.exe
+                ${{ github.workspace }}\packaging\exe-arm64\UKMCL-Windows-Installer-en_US-arm64+0.0.0.exe
+              retention-days: 1
 
 #   buildLin:
 #       if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
@@ -232,3 +227,8 @@ jobs:
 #       runs-on: ubuntu-latest
 #       steps:
 #           - uses: actions/checkout@v4
+
+
+# must also zip all of this too
+# rid: mac: osx-x64, osx-arm64; win: win-x64, win-arm64; lin: linux-x64, linux-arm64, linux-musl-x64
+# For linux distributions, appimage for ubuntu, dpkg-deb for debian, flatpak for uni gui packaging, optional to snap
