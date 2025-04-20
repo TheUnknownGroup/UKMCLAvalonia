@@ -5,7 +5,7 @@
 #define Version "v0.0.0"
 
 #define PackagingDir "./"
-#define BaseFilename "UKMCLAvalonia-Windows-Installer-en_US-x64+0.0.0"
+#define BaseFilename "UKMCLAvalonia-Windows-Installer-en_US-arm64+0.0.0"
 
 [Setup]
 AppName={#Name}

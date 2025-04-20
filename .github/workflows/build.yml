@@ -164,6 +164,7 @@ jobs:
               path: |
                 ${{ env.lin-filename }}x64.deb
                 ${{ env.lin-filename }}arm64.deb
+              retention-days: 1
 
   buildInstaller-Mac:
     if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
@@ -219,6 +220,7 @@ jobs:
           path: |
             ${{ env.mac-filename }}x64.dmg
             ${{ env.mac-filename }}arm64.dmg
+          retention-days: 1
 # must also zip all of this too
 # rid: mac: osx-x64, osx-arm64; win: win-x64, win-arm64; lin: linux-x64, linux-arm64, linux-musl-x64
 # For linux distributions, appimage for ubuntu, dpkg-deb for debian, flatpak for uni gui packaging, optional to snap
