@@ -12,7 +12,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        Icon = new WindowIcon("../../../Assets/icon.png");
+        Icon = new WindowIcon("../../../../../Assets/icon.png");
         this.Classes.Add("main");
     }
     private void OnHelloClick(object? sender, RoutedEventArgs e)

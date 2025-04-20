@@ -13,7 +13,6 @@
     <Company>TheUnknownGroup</Company>
     <Product>UKMCLAvalonia Windows Exe</Product>
     <Copyright>TheUnknownGroup © 2025</Copyright>
-	<PublishAot>true</PublishAot>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Assets\**" />

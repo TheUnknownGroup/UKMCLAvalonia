@@ -68,7 +68,7 @@ jobs:
               run: |
                 sudo apt-get update
                 sudo apt-get install -y libc6 libx11-6 libice6 libsm6 \
-                libfontconfig libgcc-s1 libssl3 libstdc++6 tzdata zlib1g krb5
+                libfontconfig libgcc-s1 libssl3 libstdc++6 tzdata zlib1g
 
 
 # name: Build Avalonia App
