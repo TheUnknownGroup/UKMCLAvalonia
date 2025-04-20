@@ -11,5 +11,12 @@
 				<ColorPaletteResources x:Key="Dark" Accent="#ff223c57" AltHigh="Black" AltLow="Black" AltMedium="Black" AltMediumHigh="Black" AltMediumLow="Black" BaseHigh="White" BaseLow="#ff646464" BaseMedium="#ffb2b2b2" BaseMediumHigh="#ffc6c6c6" BaseMediumLow="#ff8b8b8b" ChromeAltLow="#ffc6c6c6" ChromeBlackHigh="Black" ChromeBlackLow="#ffc6c6c6" ChromeBlackMedium="Black" ChromeBlackMediumLow="Black" ChromeDisabledHigh="#ff646464" ChromeDisabledLow="#ffb2b2b2" ChromeGray="#ff9f9f9f" ChromeHigh="#ff9f9f9f" ChromeLow="#ff2c2c2c" ChromeMedium="#ff3a3a3a" ChromeMediumLow="#ff565656" ChromeWhite="White" ListLow="#ff3a3a3a" ListMedium="#ff646464" RegionColor="#ff313131" />
 			</FluentTheme.Palettes>
 		</FluentTheme>
+		<Style Selector="Window.main">
+			<Setter Property="Background">
+				<Setter.Value>
+					<ImageBrush Source="avares://UKMCLAvalonia-Windows-en_US+0.0.0/Assets/background.png" />
+				</Setter.Value>
+			</Setter>
+		</Style>
 	</Application.Styles>
 </Application>

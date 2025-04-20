@@ -13,16 +13,14 @@
     <Company>TheUnknownGroup</Company>
     <Product>UKMCLAvalonia Windows Exe</Product>
     <Copyright>TheUnknownGroup © 2025</Copyright>
+	<PublishAot>true</PublishAot>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Assets\background.png" />
-    <None Remove="Assets\icon.png" />
+    <None Remove="Assets\**" />
   </ItemGroup>
   <ItemGroup>
-    <AvaloniaResource Include="Assets\background.png" />
-    <AvaloniaResource Include="Assets\icon.png" />
+    <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.2.7" />
     <PackageReference Include="Avalonia.Desktop" Version="11.2.7" />

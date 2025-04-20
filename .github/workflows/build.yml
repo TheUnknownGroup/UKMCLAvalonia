@@ -29,6 +29,31 @@ jobs:
             - name: install dependencies
               run: |
 
+    buildLin:
+        if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
+
+        permissions:
+            contents: write
+            id-token: write
+
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+  
+            - name: setup .net sdk
+              uses: actions/setup-dotnet@v4
+              with:
+                dotnet-version: ${{ env.sdk-ver }}
+
+            - name: check dependencies
+              run: |
+                sudo apt show dotnet-runtime-deps-8.0
+
+            - name: install known dependencies
+              run: |
+                sudo apt-get update
+                sudo apt-get install libx11-6 libice6 libsm6 libfontconfig libwebkit2gtk
+  
 # name: Build Avalonia App
 
 # on:
