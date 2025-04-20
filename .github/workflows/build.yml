@@ -44,12 +44,12 @@ jobs:
           cd out/${{ matrix.os }}/
           cp -r ${{ env.dir }}/${{ matrix.os }}/publish/. ./
 
-      - name: upload
+      - name: upload ${{ matrix.os }}
         uses: actions/upload-artifact@v4
         with:
           name: out
           path: |
-            out/*
+            out/${{ matrix.os }}/*
           retention-days: 1
 
   buildInstaller-Win:
