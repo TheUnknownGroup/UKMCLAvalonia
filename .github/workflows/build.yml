@@ -87,7 +87,7 @@ jobs:
               run: |
                 dotnet publish -c Release -r linux-x64 --self-contained true
                 mkdir -p out/linx64/
-                cp -r "${{ env.pub_dir}}/*" out/linx64/
+                cp -r "${{ env.pub_dir}}" out/linx64/
 
 
 # name: Build Avalonia App
