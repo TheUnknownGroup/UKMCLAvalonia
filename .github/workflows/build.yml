@@ -313,6 +313,13 @@ jobs:
           type: "zip"
           filename: "UKMCLAvalonia-Windows-x64.zip"
           path: UKMCLAvalonia-Windows-Zip-x64
+      
+      - name: make win-arm64 zip
+        uses: thedoctor0/zip-release@main
+        with:
+          type: "zip"
+          filename: "UKMCLAvalonia-Windows-arm64.zip"
+          path: UKMCLAvalonia-Windows-Zip-arm64
 
       - name: create release
         uses: softprops/action-gh-release@v2.2.2
@@ -326,6 +333,8 @@ jobs:
             sign/*.exe
             sign/*.deb
             sign/*.dmg
+            UKMCLAvalonia-Windows-x64.zip
+            UKMCLAvalonia-Windows-arm64.zip
 
 # must also zip all of this too
 # rid: mac: osx-x64, osx-arm64; win: win-x64, win-arm64; lin: linux-x64, linux-arm64, linux-musl-x64
