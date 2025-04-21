@@ -292,9 +292,9 @@ jobs:
 
       - run: |
           mkdir sign/
-          cp signing-artifacts/*.exe sign/
-          cp signing-artifacts/*.dmg sign/
-          cp signing-artifacts/*.deb sign/
+          cp signing-artifacts-sign/*.exe sign/
+          cp signing-artifacts-sign/*.dmg sign/
+          cp signing-artifacts-sign/*.deb sign/
 
       - name: create release
         uses: softprops/action-gh-release@v2
