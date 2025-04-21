@@ -299,14 +299,20 @@ jobs:
 
       - name: download signed stuff
         uses: actions/download-artifact@v4
-        with:
-          name: signing-artifacts-sign
 
       - run: |
+          mv signing-artifacts-sign sigstore
           mkdir sign/
-          cp -r signing-artifacts-sign/*.exe sign/
-          cp -r signing-artifacts-sign/*.dmg sign/
-          cp -r signing-artifacts-sign/*.deb sign/
+          cp -r sigstore/*.exe sign/
+          cp -r sigstore/*.dmg sign/
+          cp -r sigstore/*.deb sign/
+
+      - name: make win-x64 zip
+        uses: thedoctor0/zip-release@main
+        with:
+          type: "zip"
+          filename: "UKMCLAvalonia-Windows-x64.zip"
+          path: UKMCLAvalonia-Windows-Zip-x64
 
       - name: create release
         uses: softprops/action-gh-release@v2.2.2
