@@ -118,6 +118,18 @@ jobs:
                 ${{ github.workspace }}\packaging\exe-arm64\${{ env.win-filename }}arm64+0.0.0.exe
               retention-days: 1
 
+          - name: upload zip x64
+            uses: actions/upload-artifact@v4
+            with:
+              name: UKMCLAvalonia-Windows-Zip-x64
+              path: ${{ github.workspace }}\out\win-x64\
+                
+          - name: upload zip arm64
+            uses: actions/upload-artifact@v4
+            with:
+              name: UKMCLAvalonia-Windows-Zip-arm64
+              path: ${{ github.workspace }}\out\win-arm64\
+
   buildInstaller-Lin:
       if: ${{ !contains(github.event.head_commit.message, '[skip]') }}
       
@@ -292,12 +304,12 @@ jobs:
 
       - run: |
           mkdir sign/
-          cp signing-artifacts-sign/*.exe sign/
-          cp signing-artifacts-sign/*.dmg sign/
-          cp signing-artifacts-sign/*.deb sign/
+          cp -r signing-artifacts-sign/*.exe sign/
+          cp -r signing-artifacts-sign/*.dmg sign/
+          cp -r signing-artifacts-sign/*.deb sign/
 
       - name: create release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v2.2.2
         with:
           name: UKMCLAvalonia V${{ env.ver }}
           tag_name: ${{ env.ver }}
